@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Company;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
@@ -41,7 +42,7 @@ class CompanyController extends Controller
 
     public function addUsersShow(Request $request, Company $company) {
 //        dd($company->users()->orderBy('name')->get()->count());
-        $users = $company->users()->orderBy('name')->get();
+        $users = User::orderBy('name')->get();
         return view('companies.add-users', [
             'title' => 'Add company users',
             'company' => $company,
@@ -50,7 +51,16 @@ class CompanyController extends Controller
     }
 
     public function addUsersStore(Request $request, Company $company) {
-        dd($request->all());
+//        dd(count($request->except(['_token'])));
+        $userIds = $request->except(['_token']);
+        if (count($userIds) > 0) {
+            foreach ($userIds as $key => $userId) {
+                $foundUser = User::find($key); // check if this user id is valid
+                $existingUser = $company->users()->find('id', $key);
+                printf($existingUser);
+//                $company->users()->save($foundUser);
+            }
+        }
     }
 
     public function show($id) {
