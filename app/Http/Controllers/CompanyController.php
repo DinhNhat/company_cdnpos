@@ -40,7 +40,7 @@ class CompanyController extends Controller
         return redirect()->back();
     }
 
-    public function addUsersShow(Request $request, Company $company) {
+    public function companyUsersIndex(Request $request, Company $company) {
 //        dd($company->users()->orderBy('name')->get()->count());
         $users = User::orderBy('name')->get();
         return view('companies.add-users', [
@@ -50,17 +50,22 @@ class CompanyController extends Controller
         ]);
     }
 
-    public function addUsersStore(Request $request, Company $company) {
-//        dd(count($request->except(['_token'])));
-        $userIds = $request->except(['_token']);
-        if (count($userIds) > 0) {
-            foreach ($userIds as $key => $userId) {
-                $foundUser = User::find($key); // check if this user id is valid
-                $existingUser = $company->users()->find('id', $key);
-                printf($existingUser);
-//                $company->users()->save($foundUser);
+    public function companyUsersStore(Request $request, Company $company) {
+        $userIds = $request->except('_token');
+        if (!count($userIds) > 0)
+            return redirect()->back();
+
+        foreach ($userIds as $key => $userId) {
+            $foundUser = User::find($key); // check if this user id is valid
+            $existingUser = $company->users()->find($key);
+            if (isset($foundUser) && !isset($existingUser)) {
+                // userId is valid and not yet saved in table
+                // save the user id in company_user table
+                $company->users()->save($foundUser);
             }
         }
+        $company->refresh();
+        return redirect()->back();
     }
 
     public function show($id) {

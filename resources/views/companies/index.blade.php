@@ -19,7 +19,7 @@
                     <td>{{ $company->id }}</td>
                     <td>{{ $company->name }}</td>
                     <td>
-                        <a class="btn btn-success btn-sm" href="{{ route('companies.add.users', ['company' => $company->id]) }}">
+                        <a class="btn btn-success btn-sm" href="{{ route('companies.users.add', ['company' => $company->id]) }}">
                             Add users
                         </a>
                     </td>

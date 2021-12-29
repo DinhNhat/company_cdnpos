@@ -32,8 +32,8 @@ Route::prefix('/companies')->group(function() {
     Route::get('/', [CompanyController::class, 'index']);
     Route::get('add', [CompanyController::class, 'create'])->name('companies.add');
     Route::post('add', [CompanyController::class, 'store'])->name('companies.store');
-    Route::get('{company}/add/users', [CompanyController::class, 'addUsersShow'])->name('companies.add.users');
-    Route::post('{company}/add/users', [CompanyController::class, 'addUsersStore'])->name('companies.add.users');
+    Route::get('{company}/users/add', [CompanyController::class, 'companyUsersIndex'])->name('companies.users.add');
+    Route::post('{company}/users/add', [CompanyController::class, 'companyUsersStore'])->name('companies.users.add');
     Route::get('{company}/edit', [CompanyController::class, 'edit'])->name('companies.edit');
     Route::put('{company}/edit', [CompanyController::class, 'update'])->name('companies.update');
     Route::delete('destroy', [CompanyController::class, 'destroy'])->name('companies.destroy');
